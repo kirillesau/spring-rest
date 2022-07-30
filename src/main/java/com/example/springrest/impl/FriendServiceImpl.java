@@ -1,60 +1,45 @@
 package com.example.springrest.impl;
 
 import com.example.springrest.Friend;
+import com.example.springrest.FriendRepository;
 import com.example.springrest.FriendService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class FriendServiceImpl implements FriendService {
 
-  private final List<Friend> friends = new ArrayList<>(); // data should be stored in a repository
 
-  @PostConstruct
-  public void initialize() {
-    // 2 Examples
-    friends.add(Friend.builder()
-        .id(1)
-        .firstname("friend1_firstname")
-        .lastname("friend1_lastname")
-        .build());
-    friends.add(Friend.builder()
-        .id(2)
-        .firstname("friend2_firstname")
-        .lastname("friend2_lastname")
-        .build());
-  }
+  private FriendRepository friendRepository;
 
   @Override public List<Friend> getFriends() {
-    return friends;
+    return friendRepository.findAll();
   }
 
   @Override public Friend getFriend(long id) {
-    return friends.stream()
-        .filter(f -> f.getId() == id)
-        .findAny()
+    return friendRepository.findById(id)
         .orElse(null);
   }
 
+  @Transactional
   @Override public Friend addFriend(Friend newFriend, long id) {
-    friends.stream()
-        .filter(f -> f.getId() == id)
-        .findAny()
-        .ifPresentOrElse(oldFriend -> updateFriend(oldFriend, newFriend), () -> friends.add(newFriend));
+    friendRepository.findById(id)
+        .ifPresentOrElse(oldFriend -> updateFriend(oldFriend, newFriend), () -> friendRepository.save(newFriend));
     return newFriend;
   }
 
   private void updateFriend(Friend oldFriend, Friend newFriend) {
     oldFriend.setFirstname(newFriend.getFirstname());
     oldFriend.setLastname(newFriend.getLastname());
+    friendRepository.save(oldFriend);
   }
 
   @Override public void deleteFriend(long id) {
-    friends.removeIf(f -> f.getId() == id);
+    friendRepository.deleteById(id);
   }
 
 }
