@@ -3,18 +3,18 @@ package com.example.springrest.impl;
 import com.example.springrest.Friend;
 import com.example.springrest.FriendRepository;
 import com.example.springrest.FriendService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FriendServiceImpl implements FriendService {
 
 
-  private FriendRepository friendRepository;
+  private final FriendRepository friendRepository;
 
   @Override public List<Friend> getFriends() {
     return friendRepository.findAll();
