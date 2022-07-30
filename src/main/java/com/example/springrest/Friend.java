@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Objects;
 
 @Entity
 @NoArgsConstructor
@@ -22,5 +23,18 @@ public class Friend {
   private long id;
   private String firstname;
   private String lastname;
+
+  @Override public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    Friend friend = (Friend) o;
+    return id == friend.id && Objects.equals(firstname, friend.firstname) && Objects.equals(lastname, friend.lastname);
+  }
+
+  @Override public int hashCode() {
+    return Objects.hash(id, firstname, lastname);
+  }
 
 }
