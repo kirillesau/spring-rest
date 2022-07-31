@@ -35,11 +35,11 @@ class FriendServiceTest {
   void getFriends_with_5_friends_should_return_list_with_5_entries() {
     // given
     final List<Friend> friends = Arrays.asList(
-        FriendFactory.createDefaultFriend(),
-        FriendFactory.createDefaultFriend(),
-        FriendFactory.createDefaultFriend(),
-        FriendFactory.createDefaultFriend(),
-        FriendFactory.createDefaultFriend());
+        new Friend(-1L, "firstname1", "lastname1"),
+        new Friend(-1L, "firstname1", "lastname1"),
+        new Friend(-1L, "firstname1", "lastname1"),
+        new Friend(-1L, "firstname1", "lastname1"),
+        new Friend(-1L, "firstname1", "lastname1"));
 
     when(friendRepository.findAll()).thenReturn(friends);
     // when
@@ -63,7 +63,7 @@ class FriendServiceTest {
   @Test
   void getFriend_with_existing_id_should_return_friend() {
     // given
-    final Friend friend = FriendFactory.createDefaultFriend();
+    final Friend friend = new Friend(-1L, "firstname1", "lastname1");
     when(friendRepository.findById(friend.getId())).thenReturn(Optional.of(friend));
 
     // when
@@ -76,7 +76,7 @@ class FriendServiceTest {
   @Test
   void addFriend_with_existing_friend_id_should_update_friend() {
     // given
-    final Friend friend = FriendFactory.createDefaultFriend();
+    final Friend friend = new Friend(-1L, "firstname1", "lastname1");
     final long generatedId = friend.getId();
     final Friend oldFriendWithSameId = new Friend(generatedId, "oldFirstname", "oldLastname");
 
@@ -95,7 +95,7 @@ class FriendServiceTest {
   @Test
   void addFriend_with_non_existing_friend_id_should_add_to_repository() {
     // given
-    final Friend friend = FriendFactory.createDefaultFriend();
+    final Friend friend = new Friend(-1L, "firstname1", "lastname1");
     when(friendRepository.findById(5L)).thenReturn(Optional.empty());
 
     // when
